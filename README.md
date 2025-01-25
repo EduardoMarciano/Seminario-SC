@@ -1,7 +1,7 @@
 ## Project Structure
 
-S-DES implementation code is located in the src directory.
-The documentation is in the same directory, in a Jupyter Notebook named notebook.ipynb. (Only Available in Portuguese)
+Signature Generator and Verifier code is located in the src directory.
+The documentation is in the same directory, in a Jupyter Notebook named signature_generator_verifier.ipynb. (Only Available in Portuguese)
 
 You can run the Jupyter Notebook using the following command:
 
