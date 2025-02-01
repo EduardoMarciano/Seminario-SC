@@ -1,0 +1,950 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Keep aspect ratio if custom image width or height is specified
+    \setkeys{Gin}{keepaspectratio}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Signature Generator and Verifier\\[1.5em]}
+    \author{
+        Lucas Rocha \\ Universidade de Brasília \\ 211055325
+        \and
+        Gabriela de Oliveira \\ Universidade de Brasília \\ 211055254
+        \and
+        Eduardo Marciano \\ Universidade de Brasília \\ 211055227
+    }
+    \date{}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@ges}{\let\PY@bf=\textbf\let\PY@it=\textit}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{gerador-e-verificador-de-assinaturas-virtuais}{%
+\section{Gerador e Verificador de Assinaturas
+Virtuais}\label{gerador-e-verificador-de-assinaturas-virtuais}}
+
+Geradores de assinaturas digitais são ferramentas as quais garantem a
+autenticidade e/ou a integridade de uma dada mensagem. Para isso,
+utiliza-se técnicas de criptografia, normalmente criptografia
+assimétrica, onde uma chave privada é empregada para assinar
+digitalmente um dado, e o hash da mensagem é incorporado na assinatura
+como uma forma de validação do conteúdo.
+
+Já verificadores de assinaturas são responsáveis por confirmar a
+autenticidade e/ou a integridade de uma assinatura digital. Considerando
+um cenário de criptografia assimétrica como o dado acima, o verificador
+utiliza a chave pública correspondente do emissor para decifrar a
+mensagem cifrada, caso a mensagem realmente seja do emissor declaro, o
+hash deste texto em claro deve ser correspondente ao hash enviado pelo o
+emissor.
+
+Assim, neste notebook iremos implementar um gerador e verificador de
+assinatura digitais de documentos, utilizando técnicas avançadas em
+segurança da computação. Para isso, o projeto consta com três módulos
+principais: geração de chaves, encriptação e decriptação, assinatura e
+verificação.
+
+O primeiro módulo será responsável pela geração de chaves criptográficas
+com base no algoritmo RSA, onde essas chaves serão derivadas de números
+primos de 1024 bits. O segundo módulo dedica-se ao processo de
+encriptação e decriptação de mensagens utilizando o OAEP (Optimal
+Asymmetric Encryption Padding). O terceiro realiza o cálculo do hash da
+mensagem, formatação do resultado em BASE64 e sumariza a verificação de
+assinaturas digitais com um exemplo prático.
+
+    \hypertarget{gerauxe7uxe3o-de-chaves}{%
+\subsection{Geração de Chaves}\label{gerauxe7uxe3o-de-chaves}}
+
+Primeiramente começaremos nosso projeto com a parte mais crucial nos
+sistemas modernos de criptografia, a geração das chaves. As chaves são
+responsáveis por garantir a confidencialidade e a integridade de
+qualquer algoritmo de criptografia moderno, então é necessário uma alta
+atenção para se evitar qualquer tipo de padrão ou rastreabilidade em sua
+geração. Para isso, usaremos duas bibliotecas que irão nos trazer a
+aleatoriedade necessária para a geração das Chaves.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{random}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{getrandbits}\PY{p}{,} \PY{n}{randrange}
+\end{Verbatim}
+\end{tcolorbox}
+
+    O algoritmo que será responsável pela encriptação e decriptação do nosso
+projeto será o algoritmo de criptografia assimétrica RSA, amplamente
+reconhecido por sua segurança e aplicabilidade em sistemas modernos de
+criptografia assimétrica.
+
+Dito isso, por ser assimétrico, iremos gerar duas chaves, uma pública e
+uma privada. A chave pública será composta por n=p×q, onde ``p'' e ``q''
+são números primos com no mínimo 1024 bits, e por ``e'', o qual será um
+número inteiro escolhido que satisfaça a propriedade 1\textless{} ``e''
+\textless{} ϕ(n) e sendo coprimo de ϕ(n) = (p−1)×(q−1). Já a chave
+privada será representada pelo mesmo n da chave pública e por ``d'',
+calculado como ``d''≡ ``e''⁻¹ (mod  ϕ(n)), sendo ``d'' o inverso modular
+de ``e'' em relação a ϕ(n).
+
+    Com isto, o primeiro passo será gerar os primos ``q'' e ``p''. Faremos
+isso usando o teste de primalidade de Miller--Rabin, o que nos retornará
+dois primos diferentes entre si com uma alta probabilidade.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{is\PYZus{}prime}\PY{p}{(}\PY{n}{n}\PY{p}{:} \PY{n+nb}{int}\PY{p}{,} \PY{n}{k}\PY{o}{=}\PY{l+m+mi}{128}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{bool}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Teste de primalidade usando o algoritmo de Miller\PYZhy{}Rabin.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{s} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{n}{r} \PY{o}{=} \PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}
+    \PY{k}{while} \PY{n}{r} \PY{o}{\PYZam{}} \PY{l+m+mi}{1} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{n}{s} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+        \PY{n}{r} \PY{o}{/}\PY{o}{/}\PY{o}{=} \PY{l+m+mi}{2}
+
+    \PY{k}{for} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{k}\PY{p}{)}\PY{p}{:}
+        \PY{n}{a} \PY{o}{=} \PY{n}{randrange}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)}
+        \PY{n}{x} \PY{o}{=} \PY{n+nb}{pow}\PY{p}{(}\PY{n}{a}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{n}\PY{p}{)}
+        \PY{k}{if} \PY{n}{x} \PY{o}{!=} \PY{l+m+mi}{1} \PY{o+ow}{and} \PY{n}{x} \PY{o}{!=} \PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{:}
+            \PY{n}{j} \PY{o}{=} \PY{l+m+mi}{1}
+            \PY{k}{while} \PY{n}{j} \PY{o}{\PYZlt{}} \PY{n}{s} \PY{o+ow}{and} \PY{n}{x} \PY{o}{!=} \PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{:}
+                \PY{n}{x} \PY{o}{=} \PY{n+nb}{pow}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{n}\PY{p}{)}
+                \PY{k}{if} \PY{n}{x} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{:}
+                    \PY{k}{return} \PY{k+kc}{False}
+                \PY{n}{j} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+            \PY{k}{if} \PY{n}{x} \PY{o}{!=} \PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{:}
+                \PY{k}{return} \PY{k+kc}{False}
+    \PY{k}{return} \PY{k+kc}{True}
+
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{get\PYZus{}prime}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Gera um número primo de 1024 bits.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+        \PY{n}{p} \PY{o}{=} \PY{n}{getrandbits}\PY{p}{(}\PY{l+m+mi}{1024}\PY{p}{)}
+        \PY{n}{p} \PY{o}{|}\PY{o}{=} \PY{l+m+mi}{1}
+        \PY{n}{p} \PY{o}{|}\PY{o}{=} \PY{l+m+mi}{1} \PY{o}{\PYZlt{}\PYZlt{}} \PY{l+m+mi}{1023}
+        \PY{k}{if} \PY{n}{is\PYZus{}prime}\PY{p}{(}\PY{n}{p}\PY{p}{)}\PY{p}{:}
+            \PY{k}{return} \PY{n}{p}
+        
+\PY{n}{p} \PY{o}{=} \PY{n}{get\PYZus{}prime}\PY{p}{(}\PY{p}{)}
+\PY{n}{q} \PY{o}{=} \PY{n}{get\PYZus{}prime}\PY{p}{(}\PY{p}{)}
+
+\PY{k}{while} \PY{n}{p} \PY{o}{==} \PY{n}{q}\PY{p}{:}
+    \PY{n}{q} \PY{o}{=} \PY{n}{get\PYZus{}prime}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Com ``p'' e ``q'' gerados, iremos definir algumas funções auxiliares
+para calcularmos a operação mdc e os valores de ``n'' e ``phi''.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{gcd}\PY{p}{(}\PY{n}{a}\PY{p}{,} \PY{n}{b}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Calcula o máximo divisor comum (GCD) usando o algoritmo de Euclides.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{k}{while} \PY{n}{b}\PY{p}{:}
+        \PY{n}{a}\PY{p}{,} \PY{n}{b} \PY{o}{=} \PY{n}{b}\PY{p}{,} \PY{n}{a} \PY{o}{\PYZpc{}} \PY{n}{b}
+    \PY{k}{return} \PY{n}{a}
+
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{get\PYZus{}n}\PY{p}{(}\PY{n}{p}\PY{p}{,} \PY{n}{q}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Calcula o valor de n = p * q.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{k}{return} \PY{n}{p} \PY{o}{*} \PY{n}{q}
+
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{get\PYZus{}phi}\PY{p}{(}\PY{n}{p}\PY{p}{,} \PY{n}{q}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Calcula o valor de phi = (p \PYZhy{} 1) * (q \PYZhy{} 1).\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{k}{return} \PY{p}{(}\PY{n}{p} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{q} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{n}{n} \PY{o}{=} \PY{n}{get\PYZus{}n}\PY{p}{(}\PY{n}{p}\PY{p}{,} \PY{n}{q}\PY{p}{)}
+\PY{n}{phi} \PY{o}{=} \PY{n}{get\PYZus{}phi}\PY{p}{(}\PY{n}{p}\PY{p}{,} \PY{n}{q}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Agora, iremos definir duas função que irão encapsular as equações de
+geração de ``e'' e ``d''
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{choose\PYZus{}e}\PY{p}{(}\PY{n}{phi}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Escolhe um valor de \PYZsq{}e\PYZsq{} que seja coprimo a \PYZsq{}phi\PYZsq{}.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{e} \PY{o}{=} \PY{l+m+mi}{2}
+    \PY{k}{while} \PY{n}{e} \PY{o}{\PYZlt{}} \PY{n}{phi} \PY{o+ow}{and} \PY{n}{gcd}\PY{p}{(}\PY{n}{e}\PY{p}{,} \PY{n}{phi}\PY{p}{)} \PY{o}{!=} \PY{l+m+mi}{1}\PY{p}{:}
+        \PY{n}{e} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+    \PY{k}{return} \PY{n}{e}
+
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{get\PYZus{}d}\PY{p}{(}\PY{n}{e}\PY{p}{,} \PY{n}{phi}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Encotra o inverso modular de \PYZsq{}e\PYZsq{}.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{k}{return} \PY{n+nb}{pow}\PY{p}{(}\PY{n}{e}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{phi}\PY{p}{)}
+
+\PY{n}{e} \PY{o}{=} \PY{n}{choose\PYZus{}e}\PY{p}{(}\PY{n}{phi}\PY{p}{)}
+\PY{n}{d} \PY{o}{=} \PY{n}{get\PYZus{}d}\PY{p}{(}\PY{n}{e}\PY{p}{,} \PY{n}{phi}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Pronto, com ``n'', ``phi'', ``e'' e ``d'' estamos prontos para gerarmos
+nossas chaves com a função generate\_keys();
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{generate\PYZus{}keys}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{e}\PY{p}{,} \PY{n}{d}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Gera as chaves pública e privada.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{public\PYZus{}key} \PY{o}{=} \PY{p}{(}\PY{n}{e}\PY{p}{,} \PY{n}{n}\PY{p}{)}
+    \PY{n}{private\PYZus{}key} \PY{o}{=} \PY{p}{(}\PY{n}{d}\PY{p}{,} \PY{n}{n}\PY{p}{)}
+
+    \PY{k}{return} \PY{n}{public\PYZus{}key}\PY{p}{,} \PY{n}{private\PYZus{}key}
+
+\PY{n}{pk}\PY{p}{,} \PY{n}{sk} \PY{o}{=} \PY{n}{generate\PYZus{}keys}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{e}\PY{p}{,} \PY{n}{d}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Chave Pública: }\PY{l+s+si}{\PYZob{}}\PY{n}{pk}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{.}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{ Chave privada: }\PY{l+s+si}{\PYZob{}}\PY{n}{sk}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Chave Pública: (3, 1531304355407158868570424152769841423283222961644380330311835
+98041058468093454174800809430168218132040922044059041233752731122733636271702891
+62642902670396681770897280643217567529791586719921230853978235242015928493683288
+01802913673698544049969639574657757808023488068982317131501956511199972707390697
+55850023882216512128909462524519520971112985081059976065447842618844649857969174
+65464425281747754307556584063976672595399440026233774495745083490844371826108120
+26600849826544972186400287436337353645007702238299633108322664762157419962539063
+8063120133780649543207120808274959236775118733871223641992926973867153079547).
+ Chave privada: (102086957027143924571361610184656094885548197442958688687455732
+02737231206230278320053962011214542136061469603936082250182074848909084780192775
+09526844693112118059818709547837835319439114661415390265215682801061899578885867
+86860911579902936664642638310517187201565871265487808766797100746664847159379837
+23334759658904701114266227396987101034281887250005928176755637886553613303454141
+35258416625510024940716079662841996602536589429151707910400735790808127535917801
+49636107354948664752351142591712855863936048775700089228006280612371471086239438
+63982941715367060678145722607351157962799942112976450648963186813802716411, 1531
+30435540715886857042415276984142328322296164438033031183598041058468093454174800
+80943016821813204092204405904123375273112273363627170289162642902670396681770897
+28064321756752979158671992123085397823524201592849368328801802913673698544049969
+63957465775780802348806898231713150195651119997270739069755850023882216512128909
+46252451952097111298508105997606544784261884464985796917465464425281747754307556
+58406397667259539944002623377449574508349084437182610812026600849826544972186400
+28743633735364500770223829963310832266476215741996253906380631201337806495432071
+20808274959236775118733871223641992926973867153079547)
+    \end{Verbatim}
+
+    \hypertarget{encriptauxe7uxe3o-e-decriptauxe7uxe3o}{%
+\subsection{Encriptação e
+Decriptação}\label{encriptauxe7uxe3o-e-decriptauxe7uxe3o}}
+
+Agora, já em porte da chave pública e a privada, podemos avançar para o
+processo de encriptação e decriptação do algoritmo RSA. A encriptação
+será realizada com a chave privada (sk), seguindo a fórmula C =
+M\^{}``e'' mod n, onde ``M'' é a mensagem original, ``d'' é o expoente
+da chave privada e ``n'' é o produto dos números primos gerados. Já para
+a decriptação, utilizaremos a chave pública (pk), seguindo essa fórmula:
+M = C\^{}``d'', onde ``C'' é o texto cifrado e ``e'' é o expoente da
+chave pública.
+
+    \hypertarget{rsa}{%
+\subsubsection{RSA}\label{rsa}}
+
+Para encapsular a lógica dessas fórmulas, criaremos uma classe chamada
+RSA que irá gerenciar as operações de encriptação e decriptação. No
+método de inicialização da classe iremos passar as chaves pública e
+privada já definidas.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{class}\PY{+w}{ }\PY{n+nc}{RSA}\PY{p}{:}
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{public\PYZus{}key}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{private\PYZus{}key} \PY{o}{=} \PY{n}{pk}\PY{p}{,} \PY{n}{sk}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{encrypt}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{message}\PY{p}{:} \PY{n+nb}{int}\PY{p}{)}\PY{p}{:}
+\PY{+w}{        }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Criptografa uma mensagem usando a chave privada.\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{n}{d}\PY{p}{,} \PY{n}{n} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{private\PYZus{}key}
+        \PY{n}{result} \PY{o}{=} \PY{n+nb}{pow}\PY{p}{(}\PY{n}{message}\PY{p}{,} \PY{n}{d}\PY{p}{,} \PY{n}{n}\PY{p}{)}
+        \PY{k}{return} \PY{n+nb}{str}\PY{p}{(}\PY{n}{result}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{decrypt}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{message}\PY{p}{:} \PY{n+nb}{int}\PY{p}{)}\PY{p}{:}
+\PY{+w}{        }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Descriptografa uma mensagem usando a chave pública.\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{n}{e}\PY{p}{,} \PY{n}{n} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{public\PYZus{}key}
+        \PY{n}{result} \PY{o}{=} \PY{n+nb}{pow}\PY{p}{(}\PY{n}{message}\PY{p}{,} \PY{n}{e}\PY{p}{,} \PY{n}{n}\PY{p}{)}
+        \PY{k}{return} \PY{n+nb}{str}\PY{p}{(}\PY{n}{result}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{oaep}{%
+\subsubsection{OAEP}\label{oaep}}
+
+Mas, antes de aplicarmos diretamente o RSA na nossa mensagem a ser
+encriptada, primeiramente, iremos utilizar uma técnica de padding pseudo
+aleatória, OAEP (Optimal Asymmetric Encryption Padding), com o intuito
+de aumentar a segurança da nossa criptografia tornando mais difícil
+técnicas baseadas em análises matemáticas e/ou estruturais, as quais
+podem possuir alguma efetividade em mensagens com tamanho muito pequeno.
+
+O algoritmo funciona mesclando a mensagem original com um valor pseudo
+aleatório r de tamanho de 64 bytes, esse r servirá para gerarmos x e y
+que serão a base da nossa nova mensagem com seu padding. Já o algoritmo
+de decriptação é determinismo, o qual realiza operações reversas para
+obter a mensagem original. Vale ressaltar que esse algoritmo
+isoladamente não traz segurança a mensagem, qualquer um que tenha acesso
+a cifra será capaz de fazer o processo reverso. No entanto, ele adiciona
+uma camada de aleatoriedade, dificultando inferências sobre o conteúdo
+da mensagem antes da descriptografia. Por isso, iremos implementá-lo a
+seguir encapsulando-o em um classe chamada OAEP.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{hashlib}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{sha3\PYZus{}512}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{os}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{urandom}
+
+\PY{k}{class}\PY{+w}{ }\PY{n+nc}{OAEP}\PY{p}{:}
+    \PY{n}{k0} \PY{o}{=} \PY{l+m+mi}{512}
+    \PY{n}{k1} \PY{o}{=} \PY{l+m+mi}{256}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{x} \PY{o}{=} \PY{k+kc}{None}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{y} \PY{o}{=} \PY{k+kc}{None}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{sha3\PYZus{}512}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{data}\PY{p}{:} \PY{n+nb}{bytes}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{bytes}\PY{p}{:}
+\PY{+w}{        }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Aplica SHA3\PYZhy{}256 e retorna o hash como bytes.\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{k}{return} \PY{n}{sha3\PYZus{}512}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{o}{.}\PY{n}{digest}\PY{p}{(}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{encrypt}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{message}\PY{p}{:} \PY{n+nb}{int}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{int}\PY{p}{:}
+\PY{+w}{        }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Encriptação do algoritmo OAEP\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{n}{r} \PY{o}{=} \PY{n}{urandom}\PY{p}{(}\PY{l+m+mi}{64}\PY{p}{)}
+        
+        \PY{n}{message} \PY{o}{=} \PY{n}{message} \PY{o}{\PYZlt{}\PYZlt{}} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{k1}
+        
+        \PY{n}{x} \PY{o}{=} \PY{n}{message} \PY{o}{\PYZca{}} \PY{n+nb}{int}\PY{o}{.}\PY{n}{from\PYZus{}bytes}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{sha3\PYZus{}512}\PY{p}{(}\PY{n}{r}\PY{p}{)}\PY{p}{)}
+        
+        \PY{n}{y} \PY{o}{=} \PY{n+nb}{int}\PY{o}{.}\PY{n}{from\PYZus{}bytes}\PY{p}{(}\PY{n}{r}\PY{p}{)} \PY{o}{\PYZca{}} \PY{n+nb}{int}\PY{o}{.}\PY{n}{from\PYZus{}bytes}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{sha3\PYZus{}512}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{to\PYZus{}bytes}\PY{p}{(}\PY{l+m+mi}{128}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        
+        \PY{k}{return} \PY{p}{(}\PY{n}{x} \PY{o}{\PYZlt{}\PYZlt{}} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{k0}\PY{p}{)} \PY{o}{|} \PY{n}{y}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{decrypt}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{ciphertext}\PY{p}{:} \PY{n+nb}{int}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{int}\PY{p}{:}
+\PY{+w}{        }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Decriptação do algoritmo OAEP\PYZdq{}\PYZdq{}\PYZdq{}}
+        
+        \PY{n}{y} \PY{o}{=} \PY{n}{ciphertext} \PY{o}{\PYZam{}} \PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZlt{}\PYZlt{}} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{k0}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)}
+        \PY{n}{x} \PY{o}{=} \PY{n}{ciphertext} \PY{o}{\PYZgt{}\PYZgt{}} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{k0}
+
+        \PY{n}{r} \PY{o}{=} \PY{n}{y} \PY{o}{\PYZca{}} \PY{n+nb}{int}\PY{o}{.}\PY{n}{from\PYZus{}bytes}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{sha3\PYZus{}512}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{to\PYZus{}bytes}\PY{p}{(}\PY{l+m+mi}{128}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+        \PY{n}{pm} \PY{o}{=} \PY{n}{x} \PY{o}{\PYZca{}} \PY{n+nb}{int}\PY{o}{.}\PY{n}{from\PYZus{}bytes}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{sha3\PYZus{}512}\PY{p}{(}\PY{n}{r}\PY{o}{.}\PY{n}{to\PYZus{}bytes}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{k0} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+        \PY{k}{return} \PY{n}{pm} \PY{o}{\PYZgt{}\PYZgt{}} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{k1}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{assinatura-transmissuxe3o-e-verificauxe7uxe3o-de-assinatura}{%
+\subsection{Assinatura, Transmissão e Verificação de
+Assinatura}\label{assinatura-transmissuxe3o-e-verificauxe7uxe3o-de-assinatura}}
+
+Agora que já temos ferramentas o suficiente para realizarmos a geração
+das chaves, encriptação e decriptação, iremos nos preocupar com
+questionamentos fundamentais na nossa aplicação: Como podemos assinar a
+mensagem? Como podemos transmitir essa mensagem de uma maneira adequada?
+Como podemos verificar nossa assinatura?
+
+    \hypertarget{assinatura}{%
+\subsubsection{Assinatura}\label{assinatura}}
+
+Para assinarmos digitalmente nossa mensagem a ser transmitida,
+utilizaremos uma função hash, mais especificamente as funções SHA3-256 e
+SHA3-512. Uma função de hash é um algoritmo que dado uma entrada de
+dados de qualquer tamanho, sua saída será de tamanho fixo, a qual é
+chamada de hash. Utilizaremos essa função, pois ela possui a propriedade
+de que a computação reversa do hash para a mensagem original é
+extremamente custosa computacionalmente, propriedade da
+irreversibilidade. Ainda, uma função hash possui uma segunda propriedade
+de interesse para nós, a propriedade de resistência à colisão, que
+define que o processo de descoberta de uma mensagem que gere um mesmo
+hash é extremamente caro computacionalmente.
+
+Assim, a nossa estratégia de assinatura será transmitir nossa mensagem e
+o seu hash, porém este hash estará criptografado pelo algoritmo RSA. Com
+isso, ao realizar a decriptação utilizando a chave pública do emissor, o
+receptor poderá fazer o hash da mensagem recebida e comparar com o hash
+decriptado, e, caso eles sejam iguais, o emissor terá a garantia que a
+mensagem é realmente do seu emissor, já que apenas ele possui acesso a
+sua chave privada capaz de gerar a encriptação correta.
+
+Nesta parte do nosso projeto, utilizaremos a biblioteca ``hashlib'' para
+o desenvolvimento da nossa função Hash, sendo a única parte do nosso
+projeto que utilizará código de terceiros.
+
+\hypertarget{funuxe7uxe3o-hash}{%
+\paragraph{Função Hash}\label{funuxe7uxe3o-hash}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{hashlib}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{sha3\PYZus{}512}\PY{p}{,} \PY{n}{sha3\PYZus{}256}
+\PY{k}{class}\PY{+w}{ }\PY{n+nc}{sha3}\PY{p}{:}
+  \PY{n+nd}{@staticmethod}
+  \PY{k}{def}\PY{+w}{ }\PY{n+nf}{hash\PYZus{}512}\PY{p}{(}\PY{n}{message}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n+nb}{type}\PY{p}{(}\PY{n}{message}\PY{p}{)} \PY{o}{==} \PY{n+nb}{int}\PY{p}{:}
+      \PY{n}{message} \PY{o}{=} \PY{n+nb}{str}\PY{p}{(}\PY{n}{message}\PY{p}{)}
+    \PY{k}{elif} \PY{n+nb}{type}\PY{p}{(}\PY{n}{message}\PY{p}{)} \PY{o}{==} \PY{n+nb}{str}\PY{p}{:}
+      \PY{n}{message} \PY{o}{=} \PY{n}{message}\PY{o}{.}\PY{n}{encode}\PY{p}{(}\PY{p}{)}
+    \PY{k}{return} \PY{n+nb}{int}\PY{o}{.}\PY{n}{from\PYZus{}bytes}\PY{p}{(}\PY{n}{sha3\PYZus{}512}\PY{p}{(}\PY{n}{message}\PY{p}{)}\PY{o}{.}\PY{n}{digest}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+
+  \PY{n+nd}{@staticmethod}
+  \PY{k}{def}\PY{+w}{ }\PY{n+nf}{hash\PYZus{}256}\PY{p}{(}\PY{n}{message}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n+nb}{type}\PY{p}{(}\PY{n}{message}\PY{p}{)} \PY{o}{==} \PY{n+nb}{int}\PY{p}{:}
+      \PY{n}{message} \PY{o}{=} \PY{n+nb}{str}\PY{p}{(}\PY{n}{message}\PY{p}{)}
+    \PY{k}{elif} \PY{n+nb}{type}\PY{p}{(}\PY{n}{message}\PY{p}{)} \PY{o}{==} \PY{n+nb}{str}\PY{p}{:}
+      \PY{n}{message} \PY{o}{=} \PY{n}{message}\PY{o}{.}\PY{n}{encode}\PY{p}{(}\PY{p}{)}
+    \PY{k}{return} \PY{n+nb}{int}\PY{o}{.}\PY{n}{from\PYZus{}bytes}\PY{p}{(}\PY{n}{sha3\PYZus{}256}\PY{p}{(}\PY{n}{message}\PY{p}{)}\PY{o}{.}\PY{n}{digest}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{transmissuxe3o}{%
+\subsubsection{Transmissão}\label{transmissuxe3o}}
+
+Para a transmissão da nossa cifra e da menssagem, primeiramente, iremos
+converter a concatenação de ambas para o formato Base64. Isso será
+feito, pois a Base64 é uma forma de codificação que transforma dados
+binários em uma sequência de caracteres ASCII, o que normalmente é um
+formato mais adequado a transmissão de dados.
+
+Nossa implementação é um modelo simplificado da Base64, mas
+suficientemente robusto para o escopo deste projeto.
+
+\hypertarget{base64}{%
+\paragraph{BASE64}\label{base64}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{class}\PY{+w}{ }\PY{n+nc}{base\PYZus{}convert}\PY{p}{:}
+
+  \PY{n+nd}{@staticmethod}
+  \PY{k}{def}\PY{+w}{ }\PY{n+nf}{format}\PY{p}{(}\PY{n}{message}\PY{p}{:} \PY{n+nb}{int}\PY{p}{)}\PY{p}{:}
+    \PY{n}{base64\PYZus{}chars} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{res} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}
+    \PY{c+c1}{\PYZsh{}Enquanto a mensagem não se tornar 0 realiza o método de divisões sucessivas}
+    \PY{k}{while} \PY{n}{message} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{:}
+      \PY{n}{remainder} \PY{o}{=} \PY{n}{message} \PY{o}{\PYZpc{}} \PY{l+m+mi}{64}
+      \PY{n}{res} \PY{o}{=} \PY{n}{base64\PYZus{}chars}\PY{p}{[}\PY{n}{remainder}\PY{p}{]} \PY{o}{+} \PY{n}{res}
+      \PY{n}{message} \PY{o}{=} \PY{n}{message} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{64}
+    \PY{k}{return} \PY{n}{res}
+
+  \PY{n+nd}{@staticmethod}
+  \PY{k}{def}\PY{+w}{ }\PY{n+nf}{parse}\PY{p}{(}\PY{n}{base64\PYZus{}message}\PY{p}{:} \PY{n+nb}{str}\PY{p}{)}\PY{p}{:}
+    \PY{n}{base64\PYZus{}chars} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{res} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{c+c1}{\PYZsh{} procura o caracter encontrado na string}
+    \PY{k}{for} \PY{n}{char} \PY{o+ow}{in} \PY{n}{base64\PYZus{}message}\PY{p}{:}
+      \PY{n}{res} \PY{o}{=} \PY{n}{res} \PY{o}{*} \PY{l+m+mi}{64} \PY{o}{+} \PY{n}{base64\PYZus{}chars}\PY{o}{.}\PY{n}{index}\PY{p}{(}\PY{n}{char}\PY{p}{)}
+    \PY{k}{return} \PY{n}{res}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{verificauxe7uxe3o-com-exemplo-pruxe1tico}{%
+\subsubsection{Verificação com Exemplo
+Prático}\label{verificauxe7uxe3o-com-exemplo-pruxe1tico}}
+
+Agora, finalmente partiremos para a demonstração do nosso projeto. Nesta
+demonstração, geramos o contéudo do nosso plain text utilizando o lorem
+ipsum, um gerador randômico de texto. O arquivo em si está disponível no
+diretório resources com nome ``input.txt''.
+
+O processo começa com a leitura do texto em formato binário, que é
+convertido diretamente em um valor numérico inteiro. Em seguida,
+calculamos o hash da mensagem para criar uma representação única e
+compacta do texto. Após isso, utilizamos o padding OAEP sobre o hash da
+mensagem para adicionar segurança à encriptação. Com o hash preparado,
+realizamos a sua criptografia utilizando a chave privada do algoritmo
+RSA. Por fim, para realizarmos a transmissão, concatenamos a mensagem ao
+hash criptografado e, assim, colocamos o resultado da concatenação em
+Base64.
+
+Já o processo de verificação é o reverso no processo de assinatura.
+Primeiramente, desfazemos o formato Base64, separamos a mensagem do hash
+criptografado e realizamos a decriptação com a chave pública do emissor
+e retiramos o padding resultado do OAEP. Assim, ao final dessa série de
+processos, temos dois dados fundamentais, a mensagem e o hash do
+emissor, caso o hash do emissor seja compatível com o hash da mensagem,
+realmente essa mensagem é do emissor declarado, garantindo assim
+confiabilidade a origem dessa mensagem, caso não seja, concluímos que ou
+o hash ou a mensagem foram interceptadas e trocadas durante a nossa
+transmissão, logo, ambas devem ser invalidadas e descartadas.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Instanciação da classe RSA}
+\PY{n}{cy} \PY{o}{=} \PY{n}{RSA}\PY{p}{(}\PY{p}{)}
+\PY{n}{oaep} \PY{o}{=} \PY{n}{OAEP}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{f} \PY{o}{=} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{../resources/input.txt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rb}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plain\PYZus{}text} \PY{o}{=} \PY{n}{f}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{p}{)}
+\PY{n}{f}\PY{o}{.}\PY{n}{close}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plain\PYZus{}text} \PY{o}{=} \PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{int}\PY{o}{.}\PY{n}{from\PYZus{}bytes}\PY{p}{(}\PY{n}{plain\PYZus{}text}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Calculo do hash 256 da mensagem}
+\PY{n}{h} \PY{o}{=} \PY{n}{sha3}\PY{o}{.}\PY{n}{hash\PYZus{}256}\PY{p}{(}\PY{n}{plain\PYZus{}text}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Encryptação desse hash}
+\PY{n}{e} \PY{o}{=} \PY{n}{oaep}\PY{o}{.}\PY{n}{encrypt}\PY{p}{(}\PY{n}{h}\PY{p}{)}
+\PY{n}{e} \PY{o}{=} \PY{n}{cy}\PY{o}{.}\PY{n}{encrypt}\PY{p}{(}\PY{n}{e}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Concatenação entre plain\PYZus{}text e o hash encriptado}
+\PY{n}{message\PYZus{}to\PYZus{}encode} \PY{o}{=} \PY{n}{plain\PYZus{}text} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{e}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Conversão para a Base64}
+\PY{n}{encoded\PYZus{}message} \PY{o}{=} \PY{n}{base\PYZus{}convert}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{n}{message\PYZus{}to\PYZus{}encode}\PY{p}{)}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Mensagem codificada em base64:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{encoded\PYZus{}message}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Parse da base64}
+\PY{n}{decoded\PYZus{}message} \PY{o}{=} \PY{n+nb}{str}\PY{p}{(}\PY{n}{base\PYZus{}convert}\PY{o}{.}\PY{n}{parse}\PY{p}{(}\PY{n}{encoded\PYZus{}message}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Separação entre o plain\PYZus{}text e o hash encriptado}
+\PY{n}{decoded\PYZus{}plain\PYZus{}text} \PY{o}{=} \PY{n}{decoded\PYZus{}message}\PY{p}{[}\PY{p}{:}\PY{n+nb}{len}\PY{p}{(}\PY{n}{plain\PYZus{}text}\PY{p}{)}\PY{p}{]}
+\PY{n}{decoded\PYZus{}plain\PYZus{}text\PYZus{}hash} \PY{o}{=} \PY{n}{sha3}\PY{o}{.}\PY{n}{hash\PYZus{}256}\PY{p}{(}\PY{n}{decoded\PYZus{}plain\PYZus{}text}\PY{p}{)}
+
+\PY{n}{encrypted\PYZus{}hash} \PY{o}{=} \PY{n}{decoded\PYZus{}message}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{plain\PYZus{}text}\PY{p}{)}\PY{p}{:}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} Decryptação do hash encriptado}
+\PY{n}{decrypted\PYZus{}hash} \PY{o}{=} \PY{n}{cy}\PY{o}{.}\PY{n}{decrypt}\PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{n}{encrypted\PYZus{}hash}\PY{p}{)}\PY{p}{)}
+\PY{n}{decrypted\PYZus{}hash} \PY{o}{=} \PY{n}{oaep}\PY{o}{.}\PY{n}{decrypt}\PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{n}{decrypted\PYZus{}hash}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Comparação entre os hashs para verificação da assinatura}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Hash da mensagem:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{decoded\PYZus{}plain\PYZus{}text\PYZus{}hash}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Hash decodificado:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{decrypted\PYZus{}hash}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Verificação de assinatura:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{decrypted\PYZus{}hash} \PY{o}{==} \PY{n}{decoded\PYZus{}plain\PYZus{}text\PYZus{}hash}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Mensagem codificada em base64: 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
+Hash da mensagem:
+101559824801157566481275910591436486590799948262884771044134935815408357614456
+Hash decodificado:
+101559824801157566481275910591436486590799948262884771044134935815408357614456
+Verificação de assinatura: True
+    \end{Verbatim}
+
+    Caso todos os passos tenham sido corretamente executados em sua devida
+ordem, a verificação da assinatura terá sido validada com a mensagem:
+``Verificação de assinatura: True''. Caso não, execute novamente todos
+os blocos desse notebook em sua devida ordem.
+
+Com isto, teremos efetivamente construído um software capaz de gerar
+assinaturas digitais, transmiti-las e verificá-las.
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
